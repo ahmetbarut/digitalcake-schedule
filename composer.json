@@ -1,0 +1,23 @@
+{
+    "name": "digitalcake/scheduling",
+    "description": "Sms ve email zamanlayıcıları ayarlamayı sağlar",
+    "type": "package",
+    "autoload": {
+        "psr-4": {
+            "Digitalcake\\Scheduling\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ahmet Barut",
+            "email": "ahmetbarut588@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+            ]
+        }
+    }
+}
