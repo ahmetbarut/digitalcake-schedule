@@ -14,7 +14,13 @@ class CreateScheduleMessagesTable extends Migration
     public function up()
     {
         Schema::create('schedule_messages', function (Blueprint $table) {
-            $table->id();
+
+            if (app()->version() >= 7.0) {
+                $table->id();
+            } else {
+                $table->increments('id');
+            }
+
             $table->string('name');
             $table->enum('type', ['email', 'sms']);
             $table->string('subject')->nullable();
