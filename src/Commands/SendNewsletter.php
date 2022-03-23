@@ -154,8 +154,8 @@ class SendNewsletter extends Command
                     )
                 );
             })
-            ->each(function ($item) use ($subject, $content) {
-                SendSmsJob::dispatch($item, $subject, $content)->onQueue('sms');
+            ->each(function ($phone) use ($subject, $content) {
+                SendSmsJob::dispatch('+' . $phone, $subject, $content)->onQueue('sms');
             });
     }
 }
