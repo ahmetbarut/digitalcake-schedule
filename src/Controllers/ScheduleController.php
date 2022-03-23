@@ -101,13 +101,17 @@ class ScheduleController extends BaseController
             );
         }
 
-        if ($users->count() == 0) {
-            return back()->withErrors(['No users found']);
+        if ($request->get('template') == 'empty-template') {
+            $name = 'empty_newsletter';
         }
-        
+        if ($request->get('template') == 'greetings-template') {
+            $name = 'greetings';
+        }
+
         $schedule = new ScheduleMessage();
-        $schedule->name = "greetings";
+        $schedule->name = $name;
         $schedule->subject = $subject;
+        $schedule->message = $request->get('content');
         $schedule->attachment = $filename ?? null;
         $schedule->template_name = $request->get('template');
         $schedule->send_at = $request->get('send_at');
@@ -142,7 +146,7 @@ class ScheduleController extends BaseController
         $request->validate([
             'type' => ['required', 'in:users,groups'],
             'subject' => ['required'],
-            'content' => ['required','string','max:960'],
+            'content' => ['required', 'string', 'max:960'],
             'send_at' => ['required', 'date'],
         ]);
 
@@ -171,7 +175,7 @@ class ScheduleController extends BaseController
         $schedule = new ScheduleMessage();
         $schedule->name = "greetings";
         $schedule->subject = $request->get('subject');
-        $schedule->message= $request->get('content');
+        $schedule->message = $request->get('content');
         $schedule->send_at = $request->get('send_at');
         $schedule->type = 'sms';
         $schedule->save();
