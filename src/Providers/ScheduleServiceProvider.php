@@ -35,6 +35,10 @@ class ScheduleServiceProvider extends ServiceProvider
             ], 'schedule-config');
         }
 
+        $this->publishes([
+            __DIR__ . '/../../public' => public_path('vendor/schedule'),
+        ]);
+
         $this->commands([
             \Digitalcake\Scheduling\Commands\SendNewsletter::class,
         ]);

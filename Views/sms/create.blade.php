@@ -103,5 +103,12 @@
         $('#content').on('keypress', function(e) {
             return e.which !== 13;
         });
+
+        $(document).ready(function() {
+            $('.datetimepicker').datetimepicker({
+                format: 'd-m-Y H:i:s',
+                minDate: new Date(),
+            });
+        });
     </script>
 @endsection
