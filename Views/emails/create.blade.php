@@ -129,5 +129,11 @@
                 }
             });
         });
+        $(document).ready(function() {
+            $('.datetimepicker').datetimepicker({
+                format: 'd-m-Y H:i:s',
+                minDate: new Date(),
+            });
+        });
     </script>
 @endsection
