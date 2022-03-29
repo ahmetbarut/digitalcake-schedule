@@ -91,14 +91,15 @@
                                         {!! Form::textarea('content', old('content'), ['class' => 'form-control tinymce']) !!}
                                     </div>
                                 </div>
-                                <div class="d-flex flex-column">
-                                    <div class="col">
-                                        <div class="form-group{!! $errors->has('date') ? ' has-error' : '' !!}">
-                                            <label for="send_at">@lang('schedule::admin.send_at')</label>
-                                            <input type="text" class="form-control datetimepicker" id="send_at"
-                                                name="send_at" value="{{ old('date') }}">
-                                        </div>
-                                    </div>
+                                <div class="form-group{!! $errors->has('mail_from') ? ' has-error' : '' !!}">
+                                    <label for="mail_from">@lang('schedule::admin.mail_from')</label>
+                                    <input type="text" class="form-control" id="mail_from" name="mail_from"
+                                        value="{{ old('mail_from') }}" placeholder="info@fibif.be">
+                                </div>
+                                <div class="form-group{!! $errors->has('date') ? ' has-error' : '' !!}">
+                                    <label for="send_at">@lang('schedule::admin.send_at')</label>
+                                    <input type="text" class="form-control datetimepicker" id="send_at" name="send_at"
+                                        value="{{ old('date') }}">
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary"

@@ -96,7 +96,12 @@ class SendNewsletter extends Command
                                     'user' => $user,
                                     'type' => 'empty'
                                 ],
-                                function ($mail) use ($user, $subject) {
+                                function (\Illuminate\Mail\Message $mail) use ($user, $subject) {
+
+                                    if ($this->scheduleMessage->mail_from !== null) {
+                                        $mail->from($this->scheduleMessage->mail_from, $subject);
+                                    }
+
                                     $mail
                                         ->to($user->email)
                                         ->subject($subject);
@@ -111,6 +116,11 @@ class SendNewsletter extends Command
                                 'user' => $user,
                                 'type' => 'newsletter'
                             ], function ($mail) use ($user, $subject) {
+
+                                if ($this->scheduleMessage->mail_from !== null) {
+                                    $mail->from($this->scheduleMessage->mail_from, $subject);
+                                }
+                                
                                 $mail->to($user->email)->subject($subject);
                             });
                         }

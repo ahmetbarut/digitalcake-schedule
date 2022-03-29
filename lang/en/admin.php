@@ -28,4 +28,5 @@ return [
     'send_greetings_submit' => 'Send Newsletter',
     'scheduling_index_add_new_sms_button' => 'Add New SMS Schedule',
     'scheduling_index_sms' => 'SMS',
+    'mail_from' => 'Mail From',
 ];
