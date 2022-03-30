@@ -92,7 +92,12 @@ class SendNewsletter extends Command
                             Mail::send(
                                 'Newsletter.Views.email.empty-template',
                                 [
-                                    'content' => $this->scheduleMessage->message,
+                                    'content' => preg_replace_callback('/src="(.*?)"/', function ($match) {
+                                        if (!parse_url($match[1])) {
+                                            return 'src="' . asset($match[1]) . '"';
+                                        }
+                                        return 'src="' . asset($match[1]) . '"';
+                                    }, $this->scheduleMessage->message),
                                     'user' => $user,
                                     'type' => 'empty'
                                 ],
@@ -120,7 +125,7 @@ class SendNewsletter extends Command
                                 if ($this->scheduleMessage->mail_from !== null) {
                                     $mail->from($this->scheduleMessage->mail_from, $subject);
                                 }
-                                
+
                                 $mail->to($user->email)->subject($subject);
                             });
                         }
