@@ -115,6 +115,7 @@ class ScheduleController extends BaseController
         $schedule->attachment = $filename ?? null;
         $schedule->template_name = $request->get('template');
         $schedule->send_at = $request->get('send_at');
+        $schedule->mail_from = $request->get('mail_from');
         $schedule->save();
 
         $schedule->users()->attach($users);
