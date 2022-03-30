@@ -111,7 +111,12 @@ class ScheduleController extends BaseController
         $schedule = new ScheduleMessage();
         $schedule->name = $name;
         $schedule->subject = $subject;
-        $schedule->message = $request->get('content');
+        $schedule->message = preg_replace_callback('/src="(.*?)"/', function ($match) {
+            if (!parse_url($match[1])) {
+                return 'src="' . asset($match[1]) . '"';
+            }
+            return 'src="' . asset($match[1]) . '"';
+        }, $request->get('content'));
         $schedule->attachment = $filename ?? null;
         $schedule->template_name = $request->get('template');
         $schedule->send_at = $request->get('send_at');
