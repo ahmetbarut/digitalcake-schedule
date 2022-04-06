@@ -7,5 +7,4 @@ use Illuminate\Database\Eloquent\Model;
 
 class SendedEmail extends Model
 {
-    use HasFactory;
 }
