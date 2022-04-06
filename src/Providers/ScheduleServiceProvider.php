@@ -48,10 +48,10 @@ class ScheduleServiceProvider extends ServiceProvider
              */
             $schedule = $app->make(Schedule::class);
 
-            // $schedule->command('newsletter:send')
-            //     ->everyMinute()
-            //     ->withoutOverlapping()
-            //     ->appendOutputTo(storage_path('logs/schedule.log'));
+            $schedule->command('newsletter:send')
+                ->everyMinute()
+                ->withoutOverlapping()
+                ->appendOutputTo(storage_path('logs/schedule.log'));
 
             $schedule->call(function () {
                 Log::alert('çalışıo');
