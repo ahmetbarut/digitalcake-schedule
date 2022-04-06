@@ -17,6 +17,7 @@ Route::group([
     Route::post('/store/sms', 'ScheduleController@storeSms')->name('store.sms');
 
     Route::get('/edit/sms/{schedule}', 'ScheduleController@editSms')->name('edit.sms');
+    Route::get('/edit/email/{schedule}', 'ScheduleController@editEmail')->name('edit.email');
 
 
     Route::post('/update/{id}', 'ScheduleController@update')->name('update');

@@ -98,12 +98,12 @@
                                                             class="fa fa-trash-alt"></i>
                                                         {{ trans('admin.remove') }}</button>
                                                         
-                                                        @if ($schedule->is_sent == 0)
+                                                        {{-- @if ($schedule->is_sent == 0)
                                                         <a class="btn btn-sm btn-warning"
                                                         href="{{ route('schedule.edit.' .( $schedule->type == 'sms' ? 'sms' : 'email'), $schedule->id) }}"><i
                                                             class="fa fa-pencil"></i>
                                                         {{ trans('admin.edit') }}</a>
-                                                        @endif
+                                                        @endif --}}
                                                 </td>
                                             </tr>
                                         @endforeach
