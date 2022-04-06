@@ -5,26 +5,10 @@
     <div class="main-container" id="page-scheduling">
 
         @include('administrator.layouts.partial.heading', [
-            'title' => trans('schedule::admin.scheduling_index_page_title'),
+            'title' => trans('newsletter::admin.scheduling_index_page_title'),
             'items' => collect([
-                ['url' => '', 'title' => __('schedule::admin.scheduling_index_page_title')],
+                ['url' => '', 'title' => __('newsletter::admin.scheduling_index_page_title')],
             ]),
-            'buttons' => collect([
-                [
-                    'url' => route('schedule.create.email'),
-                    'title' => __('schedule::admin.scheduling_index_add_new_mail_button'),
-                    'type' => 'button',
-                    'icon' => 'plus',
-                    'additionalClasses' => 'btn-primary',
-                ],
-                [
-                    'url' => route('schedule.create.sms'),
-                    'title' => __('schedule::admin.scheduling_index_add_new_sms_button'),
-                    'type' => 'button',
-                    'icon' => 'plus',
-                    'additionalClasses' => 'btn-warning',
-                ],
-            ])
         ])
         <div class="row">
             <div class="col-md-12">
@@ -33,7 +17,7 @@
                         <div class="row">
                             <div class="col-7">
                                 <p class="mb-0">
-                                    @lang('schedule::admin.scheduling_index_page_description')
+                                    @lang('newsletter::admin.scheduling_index_page_description')
                                 </p>
                             </div>
                             <div class="col-5 d-flex justify-content-end">
@@ -41,11 +25,11 @@
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item"
                                             href="{{ url('administrator/scheduling/scheduling/create/content') }}">
-                                            @lang('schedule::admin.scheduling_index_add_content')
+                                            @lang('newsletter::admin.scheduling_index_add_content')
                                         </a>
                                         <a class="dropdown-item"
                                             href="{{ url('administrator/scheduling/scheduling/create/custom') }}">
-                                            @lang('schedule::admin.scheduling_index_add_custom')
+                                            @lang('newsletter::admin.scheduling_index_add_custom')
                                         </a>
                                     </div>
                                 </div>
@@ -62,11 +46,11 @@
                                 <table class="table table-bordered table-full table-hover table-full-small mb-0"
                                     id="dataTable">
                                     <thead>
-                                        <th>{{ trans('schedule::admin.scheduling_index_name') }}</th>
-                                        <th>{{ trans('schedule::admin.scheduling_index_type') }}</th>
-                                        <th>{{ trans('schedule::admin.scheduling_index_status') }}</th>
-                                        <th>{{ trans('schedule::admin.scheduling_index_send_at') }}</th>
-                                        <th>{{ trans('schedule::admin.scheduling_index_users') }}</th>
+                                        <th>{{ trans('newsletter::admin.scheduling_index_name') }}</th>
+                                        <th>{{ trans('newsletter::admin.scheduling_index_type') }}</th>
+                                        <th>{{ trans('newsletter::admin.scheduling_index_status') }}</th>
+                                        <th>{{ trans('newsletter::admin.scheduling_index_send_at') }}</th>
+                                        <th>{{ trans('newsletter::admin.scheduling_index_users') }}</th>
                                         <th>{{ trans('admin.actions') }}</th>
                                     </thead>
                                     <tbody>
@@ -90,27 +74,20 @@
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-info" type="button"
-                                                        onclick="location.href='{{ route('schedule.show', $schedule->id) }}';"><i
+                                                        onclick="location.href='{{ url('administrator/scheduling/scheduling/' . $schedule->id . '/show') }}';"><i
                                                             class="fa fa-eye"></i>
                                                         {{ trans('admin.preview') }}</button>
                                                     <button class="btn btn-sm btn-danger btn-destroy"
-                                                        data-url="{{ route('schedule.destroy', $schedule->id) }}"><i
+                                                        data-url="{{ url('administrator/scheduling/scheduling/' . $schedule->id . '/destroy') }}"><i
                                                             class="fa fa-trash-alt"></i>
                                                         {{ trans('admin.remove') }}</button>
-                                                        
-                                                        @if ($schedule->is_sent == 0)
-                                                        <a class="btn btn-sm btn-warning"
-                                                        href="{{ route('schedule.edit.' .( $schedule->type == 'sms' ? 'sms' : 'email'), $schedule->id) }}"><i
-                                                            class="fa fa-pencil"></i>
-                                                        {{ trans('admin.edit') }}</a>
-                                                        @endif
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             @else
-                                <div class="alert alert-info">{{ trans('schedule::admin.scheduling_index_empty') }}
+                                <div class="alert alert-info">{{ trans('newsletter::admin.scheduling_index_empty') }}
                                 </div>
                             @endif
                         </section>
@@ -124,7 +101,7 @@
 @section('scripts')
     <script>
         var schedulingTranslations = {
-            'js_remove': '{{ __('schedule::admin.js_remove') }}'
+            'js_remove': '{{ __('newsletter::admin.js_remove') }}'
         };
     </script>
 @endsection

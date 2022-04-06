@@ -6,6 +6,9 @@ use App\Http\Controllers\Administrator\BaseController;
 use Illuminate\Http\Request;
 use App\Extensions\Newsletter\Models\User as NewsletterUser;
 use App\Extensions\Newsletter\Models\Group as NewsletterGroup;
+use Digitalcake\Scheduling\Contracts\UserContract;
+use Digitalcake\Scheduling\Events\ScheduleSendEmailEvent;
+use Digitalcake\Scheduling\Models\EmailSendSettings;
 use Digitalcake\Scheduling\Models\ScheduleMessage;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
@@ -48,9 +51,6 @@ class ScheduleController extends BaseController
         $rules = [
             'type' => ['required', 'in:users,groups'],
             'subject' => ['required'],
-            'image' => ['required', 'image'],
-            'content' => ['required_if:template,empty-template'],
-            'image' => ['required_if:template,greetings-template'],
             'send_at' => ['required'],
         ];
 
@@ -101,15 +101,9 @@ class ScheduleController extends BaseController
             );
         }
 
-        if ($request->get('template') == 'empty-template') {
-            $name = 'empty_newsletter';
-        }
-        if ($request->get('template') == 'greetings-template') {
-            $name = 'greetings';
-        }
 
         $schedule = new ScheduleMessage();
-        $schedule->name = $name;
+        $schedule->name = 'content';
         $schedule->subject = $subject;
         $schedule->message = preg_replace_callback('/src="(.*?)"/', function ($match) {
             if (!parse_url($match[1])) {
@@ -198,13 +192,32 @@ class ScheduleController extends BaseController
         return back()->with('success', 'Schedule deleted successfully');
     }
 
-    public function edit()
+    public function editSms(ScheduleMessage $schedule)
     {
-        # code...
+        return view('schedule::sms.edit')->with([
+            'groups' => NewsletterGroup::all(),
+            'users' => NewsletterUser::whereNotNull('phone')->get(),
+            'schedule' => $schedule
+        ]);
     }
 
-    public function update()
+    public function birthdaySettings()
     {
-        # code...
+        return view('schedule::birthday.settings')->with([
+            'setting' => EmailSendSettings::first(),
+        ]);
+    }
+
+    public function birthdaySettingsUpdate(Request $request)
+    {
+        $request->validate([
+            'email_setting' => 'required|in:-2,-1,0,1',
+        ]);
+
+        $settings = EmailSendSettings::first();
+        $settings->email_send_day = $request->input('email_setting');
+        $settings->save();
+
+        return redirect()->back()->with('success', 'Settings updated successfully');
     }
 }

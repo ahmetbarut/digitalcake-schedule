@@ -17,6 +17,7 @@
     "extra": {
         "laravel": {
             "providers": [
+                "Digitalcake\\Scheduling\\Providers\\ScheduleServiceProvider"
             ]
         }
     }

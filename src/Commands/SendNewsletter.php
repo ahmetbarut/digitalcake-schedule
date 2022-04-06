@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Extensions\Newsletter\Models\Message\Receiver;
 use App\Jobs\SendSmsJob;
+use Digitalcake\Scheduling\Events\ScheduleSendEmailEvent;
 use Digitalcake\Scheduling\Models\ScheduleMessage;
 use Illuminate\Support\Facades\Schema;
 
@@ -116,18 +117,10 @@ class SendNewsletter extends Command
                         $this->scheduleMessage->is_sent = true;
                     } elseif ($this->scheduleMessage->name = 'greetings') {
                         foreach ($this->newsletterUsers as $user) {
-                            Mail::send('Newsletter.Views.email.greetings-template', [
-                                'image' => $this->scheduleMessage->attachment,
-                                'user' => $user,
-                                'type' => 'newsletter'
-                            ], function ($mail) use ($user, $subject) {
-
-                                if ($this->scheduleMessage->mail_from !== null) {
-                                    $mail->from($this->scheduleMessage->mail_from, $subject);
-                                }
-
-                                $mail->to($user->email)->subject($subject);
-                            });
+                            event(new ScheduleSendEmailEvent($user, [
+                                'subject' => $subject,
+                                'content' => $this->scheduleMessage,
+                            ]));
                         }
                     }
                 }

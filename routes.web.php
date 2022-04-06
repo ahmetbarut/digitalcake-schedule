@@ -1,9 +1,10 @@
 <?php
 
+use Digitalcake\Scheduling\Controllers\TrackingController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'as' => 'administrator.schedule.',
+    'as' => 'schedule.',
     'namespace' => '\Digitalcake\Scheduling\Controllers',
     'middleware' => 'auth.teknoza:administrator',
     'prefix' => 'administrator/schedule',
@@ -15,9 +16,35 @@ Route::group([
     Route::get('/create/sms', 'ScheduleController@createSms')->name('create.sms');
     Route::post('/store/sms', 'ScheduleController@storeSms')->name('store.sms');
 
-    Route::get('/edit/{id}', 'ScheduleController@edit')->name('edit');
+    Route::get('/edit/sms/{schedule}', 'ScheduleController@editSms')->name('edit.sms');
+
+
     Route::post('/update/{id}', 'ScheduleController@update')->name('update');
     Route::get('/destroy/{schedule}', 'ScheduleController@destroy')->name('destroy');
 
     Route::get('/show/{schedule}', 'ScheduleController@show')->name('show');
+
+    // Email logs
+    Route::get('/emails', 'TrackingController@emails')
+        ->name('logs.emails');
+    Route::get('/emails/show/{email}', 'TrackingController@showEmail')
+        ->name('logs.email.show');
+
+    Route::get('/birth-day-settings', 'TrackingController@settings')
+        ->name('logs.emails.settings');
+
+    Route::post('/email-update', 'TrackingController@settingsUpdate')
+        ->name('logs.emails.settings.update');
+
+    Route::get('scheduling', 'TrackingController@scheduling');
+
+    Route::get('/birth-day-settings', 'ScheduleController@birthdaySettings')
+        ->name('birthday.settings');
+    Route::post('/birth-day-settings', 'ScheduleController@birthdaySettingsUpdate')
+        ->name('birthday.settings.update');
 });
+
+Route::post(
+    config('schedule.smtp2go.webhook_url'),
+    [TrackingController::class, 'index']
+)->withoutMiddleware('web');

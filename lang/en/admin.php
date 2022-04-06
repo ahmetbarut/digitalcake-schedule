@@ -25,8 +25,12 @@ return [
     'send_greetings_type_groups' => 'Groups',
     'send_greetings_subject' => 'Subject',
     'send_greetings_image_info' => 'The image should be 900px width.',
-    'send_greetings_submit' => 'Send Newsletter',
+    'send_greetings_submit' => 'Save Settings',
     'scheduling_index_add_new_sms_button' => 'Add New SMS Schedule',
     'scheduling_index_sms' => 'SMS',
     'mail_from' => 'Mail From',
+    'birthday_settings' => 'Birthday Settings',
+    'schedule' => 'Schedule',
+    'birthday_email_settings' => 'Birthday Email Settings',
+    'birthday_email_settings_help' => 'How many days before or how many days before the birthday mail is sent.',
 ];
