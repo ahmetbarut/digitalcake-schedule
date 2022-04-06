@@ -2,10 +2,10 @@
 
 namespace Digitalcake\Scheduling\Controllers;
 
-use App\Http\Controllers\Administrator\BaseController;
 use Illuminate\Http\Request;
 use App\Extensions\Newsletter\Models\User as NewsletterUser;
 use App\Extensions\Newsletter\Models\Group as NewsletterGroup;
+use App\Http\Controllers\PackageBaseController;
 use Digitalcake\Scheduling\Contracts\UserContract;
 use Digitalcake\Scheduling\Events\ScheduleSendEmailEvent;
 use Digitalcake\Scheduling\Models\EmailSendSettings;
@@ -14,8 +14,13 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 
-class ScheduleController extends BaseController
+class ScheduleController extends PackageBaseController
 {
+    public function __construct()
+    {
+        parent::__construct(app('request'));
+    }
+    
     public function index()
     {
         return view('schedule::index')

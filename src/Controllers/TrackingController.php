@@ -25,6 +25,7 @@ class TrackingController extends PackageBaseController
 
     public function __construct()
     {
+        parent::__construct(app('request'));
         $this->rejectTypes = config('schedule.smtp2go.destroy_users');
     }
 

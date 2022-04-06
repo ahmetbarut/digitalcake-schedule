@@ -9,4 +9,8 @@ use App\Http\Controllers\Administrator\BaseController as AdministratorBaseContro
  */
 class PackageBaseController extends AdministratorBaseController
 {
+    public function __construct()
+    {
+        parent::__construct(app('request'));
+    }
 }
