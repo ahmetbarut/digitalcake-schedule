@@ -100,7 +100,7 @@ class ScheduleServiceProvider extends ServiceProvider
 
     public function loadRoutes(): void
     {
-        $routesCache = Cache::get('routes');
+        $routesCache = Cache::get('routes') ?? collect([]);
 
         if ($routesCache->search(dirname(__DIR__, 2) . '/routes.web.php') === false) {
             $routesCache->push(
