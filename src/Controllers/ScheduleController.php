@@ -217,10 +217,14 @@ class ScheduleController extends PackageBaseController
     {
         $request->validate([
             'email_setting' => 'required|in:-2,-1,0,1',
+            'message' => 'required',
+            'subject' => 'required',
         ]);
 
         $settings = EmailSendSettings::first();
         $settings->email_send_day = $request->input('email_setting');
+        $settings->message = $request->input('message');
+        $settings->subject = $request->input('subject');
         $settings->save();
 
         return redirect()->back()->with('success', 'Settings updated successfully');

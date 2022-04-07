@@ -2,6 +2,7 @@
 
 namespace Digitalcake\Scheduling\Jobs;
 
+use Digitalcake\Scheduling\Models\EmailSendSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,10 +35,11 @@ class SendBirthdayEmail implements ShouldQueue
      */
     public function handle()
     {
+        $birtdaySettings = EmailSendSettings::first();
         Mail::to($this->user->getEmail())
             ->send(new \Digitalcake\Scheduling\Mail\BirthdayEmail(
-                "testing!",
-                "TESTING!!"
+                $birtdaySettings->subject,
+                $birtdaySettings->message
             ));
 
         Cache::put(explode('@', $this->user->getEmail())[0], true, now()->addDay());

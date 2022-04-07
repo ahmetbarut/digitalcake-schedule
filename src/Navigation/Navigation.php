@@ -33,7 +33,13 @@ class Navigation implements ContractsNavigation
                 [
                     'title' => 'Emails',
                     'url' => 'administrator/schedule/emails',
-                    'active' => \Request::is('administrator/newsletter/emails*'),
+                    'active' => \Request::is('administrator/schedule/emails*'),
+                    'role' => 'super_user|manager'
+                ],
+                [
+                    'title' => 'Birthday Settings',
+                    'url' => 'administrator/schedule/birth-day-settings',
+                    'active' => \Request::is('administrator/schedule/birth-day-settings*'),
                     'role' => 'super_user|manager'
                 ],
             ]

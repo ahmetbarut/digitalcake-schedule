@@ -54,7 +54,7 @@ class ScheduleServiceProvider extends ServiceProvider
                 ->appendOutputTo(storage_path('logs/schedule.log'));
 
             $schedule->call(function () {
-                Log::alert('çalışıo');
+
                 $model = config('schedule.birthday_model');
                 if ($model === null) {
                     return;

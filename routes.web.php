@@ -31,8 +31,8 @@ Route::group([
     Route::get('/emails/show/{email}', 'TrackingController@showEmail')
         ->name('logs.email.show');
 
-    Route::get('/birth-day-settings', 'TrackingController@settings')
-        ->name('logs.emails.settings');
+    // Route::get('/birth-day-settings', 'TrackingController@settings')
+    //     ->name('logs.emails.settings');
 
     Route::post('/email-update', 'TrackingController@settingsUpdate')
         ->name('logs.emails.settings.update');

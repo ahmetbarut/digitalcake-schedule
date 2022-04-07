@@ -33,4 +33,5 @@ return [
     'schedule' => 'Schedule',
     'birthday_email_settings' => 'Birthday Email Settings',
     'birthday_email_settings_help' => 'How many days before or how many days before the birthday mail is sent.',
+    'birthday_message' => 'Birthday Message',
 ];

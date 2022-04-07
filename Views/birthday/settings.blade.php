@@ -30,7 +30,16 @@
                             @endif
                             <div class="well">
                                 {!! Form::open(['class' => 'form-floating', 'files' => true, 'url' => route('schedule.birthday.settings.update')]) !!}
-
+                                <div class="form-group">
+                                    <label for="subject">@lang('schedule::admin.birthday_message')</label>
+                                    <input type="text" class="form-control" name="subject" value="{{ $setting->subject }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">@lang('schedule::admin.birthday_message')</label>
+                                    <textarea name="message" class="form-control tinymce">
+                                        {{ $setting->message }}
+                                    </textarea>
+                                </div>
                                 <div class="form-group{!! $errors->has('email_setting') ? ' has-error' : '' !!}">
                                     {!! Form::label('email_setting', trans('schedule::admin.birthday_email_settings'), ['class' => 'control-label']) !!}
                                     <select name="email_setting" id="" class="form-control">
