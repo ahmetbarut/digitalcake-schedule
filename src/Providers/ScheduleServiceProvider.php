@@ -85,7 +85,7 @@ class ScheduleServiceProvider extends ServiceProvider
                         event(new BirthdaySendEmailEvent($user));
                     });
             })
-                ->everyMinute()
+                ->dailyAt('8:00')
                 ->appendOutputTo(storage_path('logs/schedule.log'))
                 ->skip(function () {
                     return !config('schedule.birthday_email_enabled');
