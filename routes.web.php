@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VerifyCsrfToken;
 use Digitalcake\Scheduling\Controllers\TrackingController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,4 +49,4 @@ Route::group([
 Route::post(
     config('schedule.smtp2go.webhook_url'),
     [TrackingController::class, 'index']
-)->withoutMiddleware('web');
+)->withoutMiddleware([VerifyCsrfToken::class]);
