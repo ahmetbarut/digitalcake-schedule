@@ -14,11 +14,6 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-7">
-                                <p class="mb-0">
-                                    {{ $schedule->name }}
-                                </p>
-                            </div>
                             <div class="col-5 d-flex justify-content-end">
                                 <div class="dropdown">
                                     <div class="dropdown-menu">
@@ -38,18 +33,18 @@
                     <div class="card-body p-0">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">@lang('schedule::admin.scheduling_index_name')</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                            value="{{ $schedule->subject }}" disabled>
+                                            value="{{ $email->subject }}" disabled>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="name">@lang('schedule::admin.scheduling_index_type')</label>
+                                        <label for="name">@lang('schedule::admin.scheduling_index_email')</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                            value="{{ $schedule->type }}" disabled>
+                                            value="{{ $email->email }}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +53,7 @@
                                     <div class="form-group">
                                         <label for="name">@lang('schedule::admin.scheduling_index_description')</label>
                                         <div class="p-3 border bg-white">
-                                            {!! $schedule->message !!}
+                                            {!! $email->message !!}
                                         </div>
                                     </div>
                                 </div>
@@ -68,51 +63,15 @@
                                     <div class="form-group">
                                         <label for="name">@lang('schedule::admin.scheduling_index_status')</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                            value="{{ $schedule->is_sent ? 'Sended' : 'Waiting' }}" disabled>
+                                            value="{{ $email->status }}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">@lang('schedule::admin.scheduling_index_send_at')</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                            value="{{ $schedule->send_at }}" disabled>
+                                            value="{{ $email->created_at }}" disabled>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <table class="table table-hover bg-white">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    @lang('schedule::admin.scheduling_index_name')
-                                                </th>
-                                                <th>
-                                                    @if ($schedule->type == 'email')
-                                                        @lang('schedule::admin.scheduling_index_email')
-                                                    @elseif ($schedule->type == 'sms')
-                                                        @lang('schedule::admin.scheduling_index_sms')
-                                                    @endif
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($schedule->users as $user)
-                                                <tr>
-                                                    <td>
-                                                        {{ implode(' ', [$user->name, $user->surname]) }}
-                                                    </td>
-                                                    <td>
-                                                        @if ($schedule->type == 'email')
-                                                            {{ $user->email }}
-                                                        @elseif ($schedule->type == 'sms')
-                                                            {{ $user->phone }}
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>

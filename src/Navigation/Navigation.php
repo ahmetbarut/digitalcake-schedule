@@ -22,12 +22,24 @@ class Navigation implements ContractsNavigation
             'items' => [
                 [
                     'title' => 'Schedules',
-                    'url' => route('administrator.schedule.index'),
+                    'url' => route('schedule.index'),
                     'active' => request()->is(
                         'administrator/schedule',
                         'administrator/schedule/*/edit',
                         'administrator/schedule/create'
                     ),
+                    'role' => 'super_user|manager'
+                ],
+                [
+                    'title' => 'Emails',
+                    'url' => 'administrator/schedule/emails',
+                    'active' => \Request::is('administrator/schedule/emails*'),
+                    'role' => 'super_user|manager'
+                ],
+                [
+                    'title' => 'Birthday Settings',
+                    'url' => 'administrator/schedule/birth-day-settings',
+                    'active' => \Request::is('administrator/schedule/birth-day-settings*'),
                     'role' => 'super_user|manager'
                 ],
             ]
