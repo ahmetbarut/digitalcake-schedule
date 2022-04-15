@@ -208,6 +208,11 @@ class ScheduleController extends PackageBaseController
 
     public function birthdaySettings()
     {
+        if (EmailSendSettings::count() == 0) {
+            $settings = new EmailSendSettings();
+            $settings->save();
+        }
+        
         return view('schedule::birthday.settings')->with([
             'setting' => EmailSendSettings::first(),
         ]);
