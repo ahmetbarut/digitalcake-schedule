@@ -61,6 +61,9 @@ class TrackingController extends PackageBaseController
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function emails()
     {
         return view('schedule::logs.emails')

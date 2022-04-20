@@ -14,8 +14,13 @@ class AddMessageColumnToEmailSendSettings extends Migration
     public function up()
     {
         Schema::table('email_send_settings', function (Blueprint $table) {
-            $table->string('subject')->nullable();
-            $table->text('message')->nullable();
+            if (!Schema::hasColumn('email_send_settings', 'subject')) {
+                $table->string('subject')->nullable();
+            }
+            
+            if (!Schema::hasColumn('email_send_settings', 'message')) {
+                $table->text('message')->nullable();
+            }
         });
     }
 
@@ -27,7 +32,12 @@ class AddMessageColumnToEmailSendSettings extends Migration
     public function down()
     {
         Schema::table('email_send_settings', function (Blueprint $table) {
-            $table->dropColumn(['message', 'subject']);
+            $columns = [];
+
+            Schema::hasColumn('email_send_settings', 'subject') && $columns[] = 'subject';
+            Schema::hasColumn('email_send_settings', 'message') && $columns[] = 'message';
+            
+            $table->dropColumn($columns);
         });
     }
 }

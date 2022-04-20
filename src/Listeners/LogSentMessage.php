@@ -34,7 +34,7 @@ class LogSentMessage
         })->each(function ($item) use ($event) {
             $email = new SendedEmail();
             $email->email = $item;
-            $email->message = $event->data['content'];
+            $email->message = "null";
             $email->subject = $event->message->getSubject();
             $email->email_type = $event->data['type'] ?? null;
             $email->status = 'sended';

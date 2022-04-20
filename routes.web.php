@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VerifyCsrfToken;
 use Digitalcake\Scheduling\Controllers\TrackingController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,9 @@ Route::group([
     Route::get('/show/{schedule}', 'ScheduleController@show')->name('show');
 
     // Email logs
+    /**
+     * @deprecated
+     */
     Route::get('/emails', 'TrackingController@emails')
         ->name('logs.emails');
     Route::get('/emails/show/{email}', 'TrackingController@showEmail')
@@ -48,4 +52,4 @@ Route::group([
 Route::post(
     config('schedule.smtp2go.webhook_url'),
     [TrackingController::class, 'index']
-)->withoutMiddleware('web');
+)->withoutMiddleware([VerifyCsrfToken::class]);

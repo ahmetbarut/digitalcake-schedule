@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Extensions\Newsletter\Models\Message\Receiver;
-use App\Jobs\SendSmsJob;
 use Digitalcake\Scheduling\Events\ScheduleSendEmailEvent;
+use Digitalcake\Scheduling\Jobs\SendSmsJob;
 use Digitalcake\Scheduling\Models\ScheduleMessage;
 use Illuminate\Support\Facades\Schema;
 
@@ -63,9 +63,10 @@ class SendNewsletter extends Command
         if (Schema::hasTable('schedule_messages')) {
             $this->scheduleMessage = ScheduleMessage::where('is_sent', '=', false)
                 ->where(DB::raw('DATE(send_at)'), '<=', DB::raw('CURDATE()'))
-                ->where(DB::raw('TIME(send_at)'), '<=', DB::raw('CURTIME()'))
+                ->whereExists(function ($query) {
+                    $query->where(DB::raw('TIME(send_at)'), '<>', DB::raw('CURTIME()'));
+                })
                 ->first();
-
             if ($this->scheduleMessage) {
                 $this->hasSent = true;
                 $this->newsletterUsers = $this->scheduleMessage->users;
@@ -163,7 +164,7 @@ class SendNewsletter extends Command
                 );
             })
             ->each(function ($phone) use ($subject, $content) {
-                SendSmsJob::dispatch('+' . $phone, $subject, $content)->onQueue('sms');
+                SendSmsJob::dispatch($phone, $content)->onQueue('sms');
             });
     }
 }
