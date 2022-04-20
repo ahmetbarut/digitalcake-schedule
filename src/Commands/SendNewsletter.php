@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Extensions\Newsletter\Models\Message\Receiver;
+use Digitalcake\Scheduling\Events\MessageCreated;
 use Digitalcake\Scheduling\Events\ScheduleSendEmailEvent;
 use Digitalcake\Scheduling\Jobs\SendSmsJob;
 use Digitalcake\Scheduling\Models\ScheduleMessage;
@@ -141,6 +142,7 @@ class SendNewsletter extends Command
      */
     protected function sendSms(string $subject, string $content): void
     {
+
         $newsletterMessage = new Message();
         $newsletterMessage->subject = $subject;
         $newsletterMessage->content = $content;
@@ -148,23 +150,7 @@ class SendNewsletter extends Command
 
         $this->newsletterUsers
             ->each(function ($user) use ($newsletterMessage) {
-                $newsletterReceiver = new Receiver();
-                $newsletterReceiver->newsletter_message_id = $newsletterMessage->id;
-                $newsletterReceiver->newsletter_user_id = $user->id;
-                $newsletterReceiver->status = '200';
-                $newsletterReceiver->save();
-            })
-            ->pluck('phone')
-            ->map(function ($item) {
-                return \App\Helpers\Phone::addZeroForNumber(
-                    \App\Helpers\General::trimAll(
-                        PhoneNumber::parse($item)
-                            ->format(PhoneNumberFormat::INTERNATIONAL)
-                    )
-                );
-            })
-            ->each(function ($phone) use ($subject, $content) {
-                SendSmsJob::dispatch($phone, $content)->onQueue('sms');
+                event(new MessageCreated($newsletterMessage, $user));
             });
     }
 }

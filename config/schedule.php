@@ -39,4 +39,6 @@ return [
      * arayüzünü uygulaması gereklidir. Arayüzü uygulamadığınız sürece bu ayar kullanılamaz.
      */
     'birthday_model' => null,
+
+    'without_recievers' => false,
 ];
