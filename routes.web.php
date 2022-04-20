@@ -27,6 +27,9 @@ Route::group([
     Route::get('/show/{schedule}', 'ScheduleController@show')->name('show');
 
     // Email logs
+    /**
+     * @deprecated
+     */
     Route::get('/emails', 'TrackingController@emails')
         ->name('logs.emails');
     Route::get('/emails/show/{email}', 'TrackingController@showEmail')
