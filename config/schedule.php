@@ -31,7 +31,7 @@ return [
      * Bu ayarı açarsanız, model belirtmeniz gerekli ve
      * modelde Digitalcake\Scheduling\Contracts\UserBirthdayContract arayüzünü uygulaması gereklidir.
     */
-    'birthday_email_enabled' => false,
+    'birthday_email_enabled' => true,
 
     /**
      * Doğum günü maillerinin hangi modele bağlı olduğunu belirtir.

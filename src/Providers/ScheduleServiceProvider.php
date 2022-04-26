@@ -5,6 +5,7 @@ namespace Digitalcake\Scheduling\Providers;
 use Digitalcake\Scheduling\Contracts\UserBirthdayContract;
 use Digitalcake\Scheduling\Events\BirthdaySendEmailEvent;
 use Digitalcake\Scheduling\Models\EmailSendSettings;
+use Digitalcake\Scheduling\Models\SendedBirthdayEmail;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
@@ -48,48 +49,9 @@ class ScheduleServiceProvider extends ServiceProvider
              */
             $schedule = $app->make(Schedule::class);
 
-            $schedule->command('newsletter:send')
-                ->everyMinute()
-                ->withoutOverlapping()
-                ->appendOutputTo(storage_path('logs/schedule.log'));
-
-            $schedule->call(function () {
-
-                $model = config('schedule.birthday_model');
-                if ($model === null) {
-                    return;
-                }
-                /**
-                 * @var Model $model
-                 */
-                $model = new $model;
-                if (!$model instanceof UserBirthdayContract) {
-                    throw new Exception('config/schedule.php içerisinde birthday_model değeri UserContract sınıfından türetilmiş bir sınıf olmalıdır.');
-                }
-
-                $settings = EmailSendSettings::first();
-
-                $date = now();
-
-                if ($settings->email_send_day > 0) {
-                    $date->addDays($settings->email_send_day);
-                }
-                if ($settings->email_send_day < 0) {
-                    $date->subDays(abs($settings->email_send_day));
-                }
-
-                $model->whereDate($model->getBirthdateColumn(), '<', $date->format('Y-m-d'))
-                    ->get()
-                    ->map(function ($user) {
-                        Cache::put(explode('@', $user->getEmail())[0], false, now()->addMinutes(5));
-                        event(new BirthdaySendEmailEvent($user));
-                    });
-            })
-                ->dailyAt('8:00')
-                ->appendOutputTo(storage_path('logs/schedule.log'))
-                ->skip(function () {
-                    return !config('schedule.birthday_email_enabled');
-                });
+            $this->scheduleBirthday($schedule);
+            $this->scheduleNewsletter($schedule);
+            $this->schedulePrune($schedule);
         });
 
         $this->loadRoutes();
@@ -134,5 +96,63 @@ class ScheduleServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../Views' => resource_path('views/vendor/schedule')
         ], 'scheduling-views');
+    }
+
+    public function scheduleNewsletter(Schedule $schedule)
+    {
+        $schedule->command('newsletter:send')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path('logs/schedule.log'));
+    }
+
+    public function scheduleBirthday(Schedule $schedule)
+    {
+        $schedule->call(function () {
+
+            $model = config('schedule.birthday_model');
+            if ($model === null) {
+                return;
+            }
+            /**
+             * @var \Illuminate\Database\Eloquent\Model $model
+             */
+            $model = new $model;
+            if (!$model instanceof UserBirthdayContract) {
+                throw new Exception('config/schedule.php içerisinde birthday_model değeri UserContract sınıfından türetilmiş bir sınıf olmalıdır.');
+            }
+
+            $settings = EmailSendSettings::first();
+
+            $date = now();
+
+            if ($settings->email_send_day > 0) {
+                $date->addDays($settings->email_send_day);
+            }
+            if ($settings->email_send_day < 0) {
+                $date->subDays(abs($settings->email_send_day));
+            }
+
+            $model->whereMonth($model->getBirthdateColumn(), $date->format('m'))
+                ->whereDay($model->getBirthdateColumn(), $date->format('d'))
+                ->get()
+                ->map(function ($user) {
+                    event(new BirthdaySendEmailEvent($user));
+                });
+        })
+            ->twiceDaily(1, 13)
+            ->appendOutputTo(storage_path('logs/schedule.log'))
+            ->skip(function () {
+                return !config('schedule.birthday_email_enabled');
+            });
+    }
+
+    public function schedulePrune(Schedule $schedule)
+    {
+        $schedule->command('model:prune', [
+            '--model' => [SendedBirthdayEmail::class,]
+        ])
+            ->monthly()
+            ->appendOutputTo(storage_path('logs/schedule.log'));
     }
 }

@@ -4,11 +4,19 @@ namespace Digitalcake\Scheduling\Listeners;
 
 use Digitalcake\Scheduling\Events\BirthdaySendEmailEvent;
 use Digitalcake\Scheduling\Jobs\SendBirthdayEmail;
+use Digitalcake\Scheduling\Models\EmailSendSettings;
+use Digitalcake\Scheduling\Models\SendedBirthdayEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-class BirthdayEmailListener
+class BirthdayEmailListener implements ShouldQueue
 {
+    public $connection = "database";
+
+    public $queue = "default";
+
     /**
      * Create the event listener.
      *
@@ -16,7 +24,6 @@ class BirthdayEmailListener
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -27,8 +34,23 @@ class BirthdayEmailListener
      */
     public function handle(BirthdaySendEmailEvent $event)
     {
-        SendBirthdayEmail::dispatch($event->user)
-            ->onQueue('birthday')
-            ->delay(now()->addSeconds(5));
+        $sendedEmail = new SendedBirthdayEmail();
+
+        if ($sendedEmail->where(
+            'email',
+            $event
+                ->user
+                ->getEmail()
+        )->count() === 0) {
+            $birtdaySettings = EmailSendSettings::first();
+            $sendedEmail->email = $event->user->getEmail();
+            $sendedEmail->save();
+
+            Mail::to($event->user->getEmail())
+                ->send(new \Digitalcake\Scheduling\Mail\BirthdayEmail(
+                    $birtdaySettings->subject,
+                    $birtdaySettings->message
+                ));
+        }
     }
 }
