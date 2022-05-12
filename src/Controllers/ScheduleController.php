@@ -124,7 +124,7 @@ class ScheduleController extends PackageBaseController
 
         $schedule->users()->attach($users);
 
-        return back()->with('success', 'Email scheduled successfully');
+        return back()->with('success', 'Your mail has been scheduled.');
     }
 
     public function show(ScheduleMessage $schedule)
@@ -187,7 +187,7 @@ class ScheduleController extends PackageBaseController
 
         $schedule->users()->attach($users);
 
-        return back()->with('success', 'SMS scheduled successfully');
+        return back()->with('success', 'Your sms has been scheduled.');
     }
 
     public function destroy(ScheduleMessage $schedule)
